@@ -1,0 +1,40 @@
+# Generate visibility data
+N = 2048
+Nvis = 10000
+u = np.random.uniform(-N / 2 + 50, N / 2 - 50, Nvis)
+V = adversarial_vis(u)
+# Generate a set of weights which add up to one
+w = np.ones(Nvis)
+w = w / sum(w)
+# Calculate the dirty map using a DFT
+D_DFT = 0
+for i in range(Nvis):
+    D_DFT = D_DFT + np.real(w[i] * V[i] * np.exp(1j * 2 * np.pi * u[i] * x))
+# Calculate the dirty map using gridding, FFT followed by grid correction
+G = np.zeros(N, dtype=complex)
+for i in range(Nvis):
+    locations, conv_func = get_grid_weights(lookup, u[i])
+    # Values of u in G range from -N/2 to N/2-1. Thus the
+    #  index corresponding to u is u+N//2
+    G[locations + N // 2] += w[i] * V[i] * conv_func
+# The inverse FFT in numpy is defined with a 1/N prefactor
+D_FFT = N * np.real(correction * np.fft.fftshift(np.fft.ifft(np.fft.fftshift(G))))
+
+nu, x1 = make_evaluation_grids(opt_func.W, opt_func.M, N)
+gridder = calc_gridder(opt_func.h, opt_func.x0, nu, opt_func.W)
+grid_correction_opt = gridder_to_grid_correction(gridder, nu, x1, opt_func.W)
+map_err = calc_map_error(gridder, grid_correction_opt, nu, x1, opt_func.W)
+
+scale_CS = np.sum(w * abs(V)**2)  # Factor to apply to map error to give Cauchy Schwarz bound on squared difference
+scale_RND = np.sum(w**2) * sum(abs(V)**2) / Nvis  # Factor to apply to map error to give squared difference for "typical" data
+
+plt.figure()
+plt.semilogy(x, abs(D_DFT - D_FFT)**2, label='Calculated error')
+plt.semilogy(x1, map_err * scale_CS, 'k', label='_nolegend_')
+plt.semilogy(-x1, map_err * scale_CS, 'k', label='Cauchy-Schwarz bound')
+plt.semilogy(x1, map_err * scale_RND, 'y', label='_nolegend_')
+plt.semilogy(-x1, map_err * scale_RND, 'y', label='Typical error')
+plt.xlabel('Normalized map coordinate')
+plt.ylabel('Squared difference between DFT and FFT maps')
+plt.legend()
+plt.grid(True)
