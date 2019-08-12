@@ -1,6 +1,6 @@
 This repository contains the code and tutorials associated with the paper "Optimal gridding and degridding in radio interferometry imaging" by Haoyang Ye, Stephen F. Gull, Sze M. Tan and Bojan Nikolic, submitted to the Monthly Notices of the Royal Astronomical Society. A preliminary version is available at https://arxiv.org/abs/1906.07102.
 
-Within the notebooks directory are a number of Jupyter notebooks which are intended as tutorials describing the use and properties of the least misfit functions. These are convolutional gridding functions designed to minimize the difference between a map computed using direct Fourier transform and one computed using a fast Fourier transform. The code for generating and analyzing these functions is in the file notebooks/algorithms/core.py.
+Within the notebooks directory are a number of Jupyter notebooks which are intended as tutorials describing the use and properties of the least misfit functions. These are convolutional gridding functions designed to minimize the difference between a map computed using direct Fourier transform and one computed using a fast Fourier trasform. The code for generating and analyzing these functions is in the file notebooks/algorithms/core.py.
 
 The notebooks are intended to be read in the following order:
 
