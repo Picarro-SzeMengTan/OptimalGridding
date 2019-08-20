@@ -11,6 +11,13 @@ The notebooks are intended to be read in the following order:
 
 The notebooks and code are intended for use with Python 3.5 and above and make use of the numpy, scipy and attrs libraries.
 
+## Installing the attrs package
+Note that even though the code imports from `attr`, the name of the package on pypi is `attrs` (https://www.attrs.org). It may be installed from within a Jupyter notebook by executing the following within a cell:
+
+```
+import sys
+!$sys.executable -m pip install attrs
+```
 
 Sze Tan
 (szemengtan@gmail.com)
